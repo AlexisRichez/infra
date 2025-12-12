@@ -1,26 +1,20 @@
-#!/bin/bash
-# Installation simplifiée de Plex sur Raspberry Pi 5 (ARM64)
+# 1. Update your system
+sudo apt update && sudo apt upgrade -y
 
-set -e
+# 2. Install necessary packages
+sudo apt install apt-transport-https curl gpg -y
 
-echo "Mise à jour du système..."
+# 3. Import Plex GPG key
+curl https://downloads.plex.tv/plex-keys/PlexSign.key | gpg --dearmor | sudo tee /usr/share/keyrings/plex-archive-keyring.gpg >/dev/null
+
+# 4. Add the Plex repository
+echo deb [signed-by=/usr/share/keyrings/plex-archive-keyring.gpg] https://downloads.plex.tv/repo/deb public main | sudo tee /etc/apt/sources.list.d/plexmediaserver.list
+
+# 5. Update package list again
 sudo apt update
-sudo apt upgrade -y
 
-echo "Installation des dépendances nécessaires..."
-sudo apt install -y curl apt-transport-https
+# 6. Install Plex Media Server
+sudo apt install plexmediaserver -y
 
-echo "Téléchargement de Plex Media Server..."
-curl -L https://downloads.plex.tv/plex-media-server-new/PlexMediaServer-latest-arm64.deb -o plexmediaserver.deb
-
-echo "Installation du paquet Plex..."
-sudo dpkg -i plexmediaserver.deb || sudo apt -f install -y
-
-rm plexmediaserver.deb
-
-echo "Activation et démarrage du service Plex..."
-sudo systemctl enable plexmediaserver
-sudo systemctl start plexmediaserver
-
-echo "Installation terminée !"
-echo "Accès à Plex : http://$(hostname -I | awk '{print $1}'):32400/web"
+# 7. Reboot for good measure
+sudo reboot
