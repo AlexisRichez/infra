@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script d'installation de Home Assistant Supervised sur Raspberry Pi (corrigé)
+# Installation de Home Assistant Supervised sur Raspberry Pi OS Lite (64-bit)
 
 set -e
 
@@ -22,7 +22,7 @@ sudo apt-get install -y \
 echo "=== Installation de Docker ==="
 curl -fsSL https://get.docker.com | sh
 
-echo "=== Activation des services nécessaires ==="
+echo "=== Activation des services ==="
 sudo systemctl enable docker
 sudo systemctl start docker
 
@@ -40,4 +40,4 @@ sudo systemctl enable home-assistant.service
 sudo systemctl start home-assistant.service
 
 echo "=== Installation terminée ==="
-echo "Accédez à Home Assistant via http://<IP_DE_VOTRE_PI>:8123 pour finaliser la configuration."
+echo "Ouvrez http://<IP_DE_VOTRE_PI>:8123 pour finaliser la configuration et installer les add-ons."
